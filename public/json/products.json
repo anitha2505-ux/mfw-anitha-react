@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Hypoallergenic Dog Shampoo",
+    "category": "Grooming",
+    "price": 18.9,
+    "image": "/images/dog-shampoo.jpg",
+    "description": "Gentle formula suitable for sensitive skin.",
+    "stock": 25
+  },
+  {
+    "id": 2,
+    "name": "Cat Dental Treats (Salmon)",
+    "category": "Food",
+    "price": 12.5,
+    "image": "/images/cat-dental-treats.jpg",
+    "description": "Crunchy treats to support dental hygiene.",
+    "stock": 40
+  },
+  {
+    "id": 3,
+    "name": "Paw Balm (50g)",
+    "category": "Health",
+    "price": 15.0,
+    "image": "/images/paw-balm.jpg",
+    "description": "Moisturises and protects paws from dryness.",
+    "stock": 18
+  }
+]

@@ -1,0 +1,75 @@
+/* Flip-card container */
+.pc-card {
+  perspective: 1000px;
+  height: 100%;
+  min-height: 360px;
+}
+
+/* Inner wrapper for 3D flip */
+.pc-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+/* Flipped state */
+.pc-card.is-flipped .pc-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Both faces */
+.pc-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Back face rotated */
+.pc-back {
+  transform: rotateY(180deg);
+}
+
+/* Image styling */
+.pc-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Price styling */
+.pc-price {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Small hint text */
+.pc-hint {
+  font-size: 0.8rem;
+  align-self: center;
+}
+
+/* Optional overlay button to allow clicking card to flip (front face) */
+.pc-overlay-btn {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Keep buttons clickable above overlay */
+.pc-front .btn,
+.pc-front .btn-link {
+  position: relative;
+  z-index: 2;
+}
+
+/* Keep overlay behind visible controls */
+.pc-overlay-btn {
+  z-index: 1;
+}
