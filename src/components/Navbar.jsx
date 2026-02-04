@@ -1,9 +1,14 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
+import { useAtomValue } from "jotai";
+import { cartAtom } from "../store/atoms";
 import { getAuth, clearAuth } from "../services/authStorage";
 
-export default function Navbar({ cartCount }) {
+export default function Navbar() {
   const [, setLocation] = useLocation();
+  const cart = useAtomValue(cartAtom);
+  const cartCount = cart.reduce((n, i) => n + Number(i.qty || 0), 0);
+
   const auth = getAuth();
 
   function logout() {
@@ -27,6 +32,10 @@ export default function Navbar({ cartCount }) {
             Cart ({cartCount})
           </Link>
 
+          <Link className="nav-link" href="/checkout">
+            Checkout
+          </Link>
+
           {auth ? (
             <>
               {auth.role === "admin" && (
@@ -35,14 +44,9 @@ export default function Navbar({ cartCount }) {
                 </Link>
               )}
 
-              <span className="navbar-text text-light me-2">
-                {auth.email}
-              </span>
+              <span className="navbar-text text-light me-2">{auth.email}</span>
 
-              <button
-                className="btn btn-sm btn-outline-light"
-                onClick={logout}
-              >
+              <button className="btn btn-sm btn-outline-light" onClick={logout}>
                 Logout
               </button>
             </>

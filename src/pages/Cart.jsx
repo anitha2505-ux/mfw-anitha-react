@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "wouter";
 import CartItem from "../components/CartItem";
+import { useCartActions } from "../store/cartActions";
 
-export default function Cart({ cart, totals, onUpdateQty, onRemove }) {
+export default function Cart() {
+  const { cart, updateQty, removeFromCart } = useCartActions();
+
+  const totals = useMemo(() => {
+    const subtotal = cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
+    const shippingFee = subtotal > 0 ? 5 : 0;
+    const grandTotal = subtotal + shippingFee;
+    return { subtotal, shippingFee, grandTotal };
+  }, [cart]);
+
   if (cart.length === 0) {
     return (
       <div className="alert alert-info">
@@ -16,12 +26,7 @@ export default function Cart({ cart, totals, onUpdateQty, onRemove }) {
       <div className="col-12 col-lg-8">
         <h2 className="mb-3">Your Cart</h2>
         {cart.map((item) => (
-          <CartItem
-            key={item.productId}
-            item={item}
-            onUpdateQty={onUpdateQty}
-            onRemove={onRemove}
-          />
+          <CartItem key={item.productId} item={item} onUpdateQty={updateQty} onRemove={removeFromCart} />
         ))}
       </div>
 

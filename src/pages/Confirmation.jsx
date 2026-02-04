@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "wouter";
+import { useAtomValue } from "jotai";
+import { orderAtom } from "../store/atoms";
 
-export default function Confirmation({ order }) {
+export default function Confirmation() {
+  const order = useAtomValue(orderAtom);
+
   if (!order) {
     return (
       <div className="alert alert-warning">
@@ -22,7 +26,12 @@ export default function Confirmation({ order }) {
         {order.customer.fullName}
         <br />
         {order.customer.email}
-        {order.customer.phone ? <><br />{order.customer.phone}</> : null}
+        {order.customer.phone ? (
+          <>
+            <br />
+            {order.customer.phone}
+          </>
+        ) : null}
         <br />
         {order.customer.address}
         <br />
@@ -32,21 +41,18 @@ export default function Confirmation({ order }) {
       <h5>Items</h5>
       <ul className="list-group mb-3">
         {order.items.map((item) => (
-          <li
-            key={item.productId}
-            className="list-group-item d-flex justify-content-between"
-          >
+          <li key={item.productId} className="list-group-item d-flex justify-content-between">
             <span>
               {item.name} × {item.qty}
             </span>
-            <span>${(item.price * item.qty).toFixed(2)}</span>
+            <span>${(Number(item.price) * Number(item.qty)).toFixed(2)}</span>
           </li>
         ))}
       </ul>
 
       <div className="d-flex justify-content-between fw-bold">
-        <span>Total Paid</span>
-        <span>${order.totals.grandTotal.toFixed(2)}</span>
+        <span>Total</span>
+        <span>${Number(order.totals.grandTotal).toFixed(2)}</span>
       </div>
 
       <Link className="btn btn-primary mt-3" href="/products">

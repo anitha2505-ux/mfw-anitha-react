@@ -1,7 +1,13 @@
 import React, { useMemo, useState } from "react";
+import { useAtomValue } from "jotai";
 import ProductCard from "../components/ProductCard";
+import { productsAtom } from "../store/atoms";
+import { useCartActions } from "../store/cartActions";
 
-export default function Products({ products, onAddToCart }) {
+export default function Products() {
+  const products = useAtomValue(productsAtom);
+  const { addToCart } = useCartActions();
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
@@ -11,9 +17,9 @@ export default function Products({ products, onAddToCart }) {
   }, [products]);
 
   const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
     return products.filter((p) => {
-      const matchesSearch =
-        p.name.toLowerCase().includes(search.toLowerCase().trim());
+      const matchesSearch = p.name.toLowerCase().includes(q);
       const matchesCategory = category === "All" || p.category === category;
       return matchesSearch && matchesCategory;
     });
@@ -54,7 +60,7 @@ export default function Products({ products, onAddToCart }) {
         <div className="row g-3">
           {filtered.map((p) => (
             <div className="col-12 col-md-6 col-lg-4" key={p.id}>
-              <ProductCard product={p} onAddToCart={onAddToCart} />
+              <ProductCard product={p} onAddToCart={addToCart} />
             </div>
           ))}
         </div>

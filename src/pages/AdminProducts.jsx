@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { productsAtom } from "../store/atoms";
 import { fetchProducts } from "../services/productApi";
 import { getStoredProducts, hasStoredProducts, saveStoredProducts } from "../services/productStorage";
 
 export default function AdminProducts() {
-  const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({ name: "", category: "Grooming", price: "", stock: "" });
+  const [products, setProducts] = useAtom(productsAtom);
+
+  const [form, setForm] = useState({
+    name: "",
+    category: "Grooming",
+    price: "",
+    stock: "",
+    description: ""
+  });
   const [editId, setEditId] = useState(null);
 
+  // Ensure products is initialised if user lands here first
   useEffect(() => {
     async function init() {
+      if (products && products.length > 0) return;
+
       if (hasStoredProducts()) {
         setProducts(getStoredProducts());
       } else {
@@ -18,30 +30,41 @@ export default function AdminProducts() {
       }
     }
     init();
-  }, []);
+  }, [products, setProducts]);
 
   function onChange(e) {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   function resetForm() {
-    setForm({ name: "", category: "Grooming", price: "", stock: "" });
+    setForm({
+      name: "",
+      category: "Grooming",
+      price: "",
+      stock: "",
+      description: ""
+    });
     setEditId(null);
   }
 
   function addProduct() {
+    const name = form.name.trim();
     const price = Number(form.price);
     const stock = Number(form.stock);
-    if (!form.name.trim() || !Number.isFinite(price) || !Number.isFinite(stock)) return;
+
+    if (!name || !Number.isFinite(price) || !Number.isFinite(stock)) return;
+
+    const nextId =
+      products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
 
     const newProduct = {
-      id: products.length ? Math.max(...products.map(p => p.id)) + 1 : 1,
-      name: form.name.trim(),
+      id: nextId,
+      name,
       category: form.category,
       price,
       stock,
       image: "/images/placeholder.jpg",
-      description: "Admin-created product"
+      description: form.description.trim() || "Admin-created product"
     };
 
     const next = [...products, newProduct];
@@ -52,24 +75,42 @@ export default function AdminProducts() {
 
   function startEdit(p) {
     setEditId(p.id);
-    setForm({ name: p.name, category: p.category, price: String(p.price), stock: String(p.stock) });
+    setForm({
+      name: p.name ?? "",
+      category: p.category ?? "Grooming",
+      price: String(p.price ?? ""),
+      stock: String(p.stock ?? ""),
+      description: p.description ?? ""
+    });
   }
 
   function updateProduct() {
+    const name = form.name.trim();
     const price = Number(form.price);
     const stock = Number(form.stock);
-    if (!editId || !form.name.trim() || !Number.isFinite(price) || !Number.isFinite(stock)) return;
 
-    const next = products.map(p =>
-      p.id === editId ? { ...p, name: form.name.trim(), category: form.category, price, stock } : p
+    if (!editId || !name || !Number.isFinite(price) || !Number.isFinite(stock)) return;
+
+    const next = products.map((p) =>
+      p.id === editId
+        ? {
+            ...p,
+            name,
+            category: form.category,
+            price,
+            stock,
+            description: form.description.trim() || p.description
+          }
+        : p
     );
+
     setProducts(next);
     saveStoredProducts(next);
     resetForm();
   }
 
   function deleteProduct(id) {
-    const next = products.filter(p => p.id !== id);
+    const next = products.filter((p) => p.id !== id);
     setProducts(next);
     saveStoredProducts(next);
     if (editId === id) resetForm();
@@ -96,7 +137,10 @@ export default function AdminProducts() {
           <input className="form-control mb-2" name="price" value={form.price} onChange={onChange} />
 
           <label className="form-label">Stock</label>
-          <input className="form-control mb-3" name="stock" value={form.stock} onChange={onChange} />
+          <input className="form-control mb-2" name="stock" value={form.stock} onChange={onChange} />
+
+          <label className="form-label">Description</label>
+          <textarea className="form-control mb-3" rows="3" name="description" value={form.description} onChange={onChange} />
 
           <div className="d-flex gap-2">
             {editId ? (
@@ -114,18 +158,24 @@ export default function AdminProducts() {
       <div className="col-12 col-lg-7">
         <h3 className="mb-2">Products ({products.length})</h3>
         <div className="list-group">
-          {products.map(p => (
+          {products.map((p) => (
             <div key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
               <div>
                 <div className="fw-semibold">{p.name}</div>
-                <div className="text-muted small">{p.category} · ${p.price.toFixed(2)} · Stock {p.stock}</div>
+                <div className="text-muted small">
+                  {p.category} · ${Number(p.price).toFixed(2)} · Stock {p.stock}
+                </div>
               </div>
               <div className="d-flex gap-2">
-                <button className="btn btn-sm btn-outline-primary" onClick={()=>startEdit(p)}>Edit</button>
-                <button className="btn btn-sm btn-outline-danger" onClick={()=>deleteProduct(p.id)}>Delete</button>
+                <button className="btn btn-sm btn-outline-primary" onClick={() => startEdit(p)}>Edit</button>
+                <button className="btn btn-sm btn-outline-danger" onClick={() => deleteProduct(p.id)}>Delete</button>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="text-muted small mt-2">
+          Changes are saved to localStorage and reflected immediately in the storefront.
         </div>
       </div>
     </div>

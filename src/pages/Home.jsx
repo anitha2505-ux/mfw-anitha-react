@@ -6,7 +6,7 @@ export default function Home() {
     <div className="p-4 bg-light rounded">
       <h1 className="mb-2">PawfectCare Products</h1>
       <p className="mb-3">
-        Browse grooming, food, and health essentials. Checkout is available (no payment gateway).
+        Browse grooming, food, and health essentials. 
       </p>
       <Link className="btn btn-primary" href="/products">
         Browse Products
