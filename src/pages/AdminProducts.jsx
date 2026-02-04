@@ -157,37 +157,42 @@ export default function AdminProducts() {
   }
 
   function updateProduct() {
-    const v = validateForm();
-    if (!v.ok) {
-      showFlash("danger", "Validation Error", v.message);
+    const name = form.name.trim();
+    const price = Number(form.price);
+    const stock = Number(form.stock);
+
+    if (!editId || !name || !Number.isFinite(price) || !Number.isFinite(stock)) {
+      showFlash("danger", "Validation Error", "Please enter valid product details.");
       return;
     }
 
-    if (!editId) {
-      showFlash("warning", "No Selection", "Please select a product to edit.");
+    // Find index of product to update
+    const index = products.findIndex((p) => p.id === editId);
+    if (index === -1) {
+      showFlash("warning", "Not Found", "Product could not be found.");
       return;
     }
 
-    const next = products.map((p) =>
-      p.id === editId
-        ? {
-            ...p,
-            name: v.name,
-            category: form.category,
-            price: v.price,
-            stock: v.stock,
-            description: form.description.trim() || p.description,
-            image: form.image || p.image
-          }
-        : p
-    );
+    // Create updated product (immutable)
+    const updatedProduct = {
+      ...products[index],
+      name,
+      category: form.category,
+      price,
+      stock,
+      description: form.description.trim() || products[index].description,
+      image: form.image || products[index].image
+    };
+
+    const next = products.with(index, updatedProduct);
 
     setProducts(next);
     saveStoredProducts(next);
 
     resetForm(false);
-    showFlash("success", "Updated", `Product "${v.name}" was updated successfully.`);
+    showFlash("success", "Updated", `Product "${updatedProduct.name}" updated successfully.`);
   }
+
 
   // --- Delete via Bootstrap modal ---
   function requestDelete(product) {
@@ -330,7 +335,7 @@ export default function AdminProducts() {
             ))}
           </div>
 
-          
+
         </div>
       </div>
 
