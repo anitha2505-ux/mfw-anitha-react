@@ -10,9 +10,14 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProducts from "./pages/AdminProducts";
+
 export default function App() {
   const [, setLocation] = useLocation();
-
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]); // { productId, name, price, qty, image }
   const [order, setOrder] = useState(null);
@@ -93,6 +98,12 @@ export default function App() {
 
       <div className="container py-4">
         <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+
+          <ProtectedRoute path="/admin" component={AdminDashboard} requireRole="admin" />
+          <ProtectedRoute path="/admin/products" component={AdminProducts} requireRole="admin" />
+          
           <Route path="/" component={Home} />
 
           <Route path="/products">
