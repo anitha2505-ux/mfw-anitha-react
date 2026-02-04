@@ -20,7 +20,7 @@ export default function Navbar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
         <Link className="navbar-brand" href="/">
-          PetCare Shop
+          PawfectCare Shop
         </Link>
 
         <div className="navbar-nav ms-auto align-items-lg-center gap-lg-2">
@@ -57,6 +57,9 @@ export default function Navbar() {
               </Link>
               <Link className="nav-link" href="/signup">
                 Sign Up
+              </Link>
+              <Link className="nav-link" href="/subscribe">
+                Subscribe
               </Link>
             </>
           )}

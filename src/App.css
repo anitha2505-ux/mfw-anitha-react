@@ -73,3 +73,34 @@
 .pc-overlay-btn {
   z-index: 1;
 }
+
+/* Animated flash container (top-right) */
+.flash-wrap {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1055; /* above navbar */
+  width: min(420px, calc(100vw - 32px));
+}
+
+/* Animation: slide in + fade */
+.flash-animate {
+  animation: flashIn 280ms ease-out;
+}
+
+@keyframes flashIn {
+  from {
+    transform: translateY(-10px) translateX(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Stronger look */
+.flash-strong {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  border-width: 2px;
+}

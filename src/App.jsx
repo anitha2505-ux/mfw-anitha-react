@@ -11,7 +11,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
-
+import Subscribe from "./pages/Subscribe";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -41,7 +41,6 @@ export default function App() {
   return (
     <>
       <Navbar />
-
       <div className="container py-4">
         <Switch>
           {/* Public */}
@@ -50,13 +49,12 @@ export default function App() {
           <Route path="/products/:id">
             {(params) => <ProductDetails id={params.id} />}
           </Route>
-
           <Route path="/cart" component={Cart} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/confirmation" component={Confirmation} />
-
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
+          <Route path="/subscribe" component={Subscribe} />
 
           {/* Admin */}
           <ProtectedRoute path="/admin" component={AdminDashboard} requireRole="admin" />
@@ -66,6 +64,7 @@ export default function App() {
           <Route>
             <div className="alert alert-warning">Page not found. Please use the navigation menu.</div>
           </Route>
+          
         </Switch>
       </div>
     </>

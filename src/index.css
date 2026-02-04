@@ -13,3 +13,110 @@ body {
 main {
   padding-bottom: 2rem;
 }
+
+/* Flip-card container */
+.pc-card {
+  perspective: 1000px;
+  height: 100%;
+  min-height: 360px;
+}
+
+/* Inner wrapper for 3D flip */
+.pc-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+/* Flipped state */
+.pc-card.is-flipped .pc-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Both faces */
+.pc-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Back face rotated */
+.pc-back {
+  transform: rotateY(180deg);
+}
+
+/* Image styling */
+.pc-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Price styling */
+.pc-price {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Small hint text */
+.pc-hint {
+  font-size: 0.8rem;
+  align-self: center;
+}
+
+/* Optional overlay button to allow clicking card to flip (front face) */
+.pc-overlay-btn {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Keep buttons clickable above overlay */
+.pc-front .btn,
+.pc-front .btn-link {
+  position: relative;
+  z-index: 2;
+}
+
+/* Keep overlay behind visible controls */
+.pc-overlay-btn {
+  z-index: 1;
+}
+
+/* Animated flash container (top-right) */
+.flash-wrap {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1055; /* above navbar */
+  width: min(420px, calc(100vw - 32px));
+}
+
+/* Animation: slide in + fade */
+.flash-animate {
+  animation: flashIn 280ms ease-out;
+}
+
+@keyframes flashIn {
+  from {
+    transform: translateY(-10px) translateX(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Stronger look */
+.flash-strong {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  border-width: 2px;
+}
