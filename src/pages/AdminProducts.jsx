@@ -237,6 +237,7 @@ export default function AdminProducts() {
               <option value="Food">Food</option>
               <option value="Health">Health</option>
               <option value="Accessories">Accessories</option>
+              <option value="Medication">Medication</option>
             </select>
 
             <label className="form-label">Price</label>

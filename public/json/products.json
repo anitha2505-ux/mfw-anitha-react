@@ -25,5 +25,23 @@
     "image": "/images/paw-balm.jpg",
     "description": "Moisturises and protects paws from dryness.",
     "stock": 18
+  },
+  {
+    "id": 6,
+    "name": "Canine Eye Drops",
+    "category": "Medication",
+    "price": 9.99,
+    "image": "/images/pet-eyedrop.jpg",
+    "description": "For Dry Eyes.",
+    "stock": 50
+  },
+  {
+    "id": 7,
+    "name": "Pet Travel Water Bottle",
+    "category": "Accessories",
+    "price": 14.99,
+    "image": "/images/pet-water-bottle.jpg",
+    "description": "Portable water bottle designed for pets during travel and walks.",
+    "stock": 30
   }
 ]
